@@ -11,7 +11,6 @@
     "build": "npm run build -w shared && npm run build -w server && npm run build -w client",
     "vercel-build": "npm run build -w shared && npm run db:generate -w server && npm run build -w client",
     "db:migrate:turso": "npm run db:migrate:turso -w server",
-    "postinstall": "npm run db:generate -w server",
     "db:migrate": "npm run db:migrate -w server",
     "db:seed": "npm run db:seed -w server"
   },
