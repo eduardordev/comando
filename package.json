@@ -1,0 +1,21 @@
+{
+  "name": "comando-del-dia",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npm run build -w shared && npm run build -w server && npm run build -w client",
+    "vercel-build": "npm run build -w shared && npm run db:generate -w server && npm run build -w client",
+    "db:migrate:turso": "npm run db:migrate:turso -w server",
+    "postinstall": "npm run db:generate -w server",
+    "db:migrate": "npm run db:migrate -w server",
+    "db:seed": "npm run db:seed -w server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

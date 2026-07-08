@@ -1,0 +1,27 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Task {
+  id                   String    @id @default(uuid())
+  title                String
+  description          String    @default("")
+  checklist            String    @default("[]")
+  urgent               Boolean   @default(false)
+  important            Boolean   @default(false)
+  status               String    @default("pending")
+  createdAt            DateTime  @default(now()) @map("created_at")
+  completedAt          DateTime? @map("completed_at")
+  pointsAwarded        Int?      @map("points_awarded")
+  quadrantAtCompletion Int?      @map("quadrant_at_completion")
+
+  @@index([status])
+  @@index([completedAt])
+  @@map("tasks")
+}

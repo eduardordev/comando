@@ -1,0 +1,213 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1080px;
+}
+
+.heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  color: var(--text);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.gridMobile {
+  grid-template-columns: 1fr;
+}
+
+.form,
+.preview {
+  background: var(--card);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.preview {
+  padding: 22px;
+  gap: 16px;
+  position: sticky;
+  top: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--card-inner);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.toggles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.togglesMobile {
+  grid-template-columns: 1fr;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  background: var(--card-inner);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 12px;
+  text-align: left;
+}
+
+.toggleOn {
+  background: #3a1712;
+  border-color: var(--accent);
+  color: var(--accent-light);
+}
+
+.knob {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.knobOn {
+  background: var(--accent);
+}
+
+.subtaskRow {
+  display: flex;
+  gap: 8px;
+}
+
+.addBtn {
+  padding: 10px 16px;
+  background: var(--border);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.subtaskList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.subtaskItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--card-inner);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--text-body);
+}
+
+.removeBtn {
+  background: none;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.submit {
+  text-align: center;
+  padding: 14px 16px;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  border: none;
+  background: var(--border);
+  color: var(--text-dim);
+  cursor: default;
+}
+
+.submitActive {
+  background: var(--accent);
+  color: var(--bg);
+  cursor: pointer;
+}
+
+.previewLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+.explanation {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.previewPoints {
+  padding-top: 10px;
+  border-top: 1px solid var(--border-strong);
+}
+
+.previewPointsLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+.previewPointsValue {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--text);
+}

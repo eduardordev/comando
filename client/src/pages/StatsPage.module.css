@@ -1,0 +1,181 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  max-width: 1180px;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  color: var(--text);
+}
+
+.topGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.topGridMobile {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.statCard {
+  background: var(--card);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+
+.statLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+.statValue,
+.statValueAccent {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  color: var(--text);
+  margin-top: 6px;
+}
+
+.statValueAccent {
+  color: var(--accent);
+}
+
+.chainCard,
+.chartCard,
+.quadrantCard {
+  background: var(--card);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.sectionLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+}
+
+.weeks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.weekRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.weekLabel {
+  width: 70px;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.weekDays {
+  display: flex;
+  gap: 5px;
+}
+
+.bottomGrid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.bottomGridMobile {
+  grid-template-columns: 1fr;
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  height: 160px;
+}
+
+.barCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.barValue {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.bar {
+  width: 100%;
+  max-width: 38px;
+  border-radius: 4px 4px 0 0;
+}
+
+.barLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.quadrantCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.quadrantRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.quadrantName {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.quadrantCount {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.loading,
+.error {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.error {
+  color: var(--accent);
+}

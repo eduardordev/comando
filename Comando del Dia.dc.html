@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: #0B0D10; }
+    ::selection { background: #FF4527; color: #0B0D10; }
+    input, textarea { font-family: inherit; outline: none; }
+    input::placeholder, textarea::placeholder { color: #4A515C; }
+    @keyframes cdPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(245,185,63,0.55); } 50% { box-shadow: 0 0 0 5px rgba(245,185,63,0); } }
+    @keyframes cdGlow { 0%,100% { box-shadow: 0 0 8px rgba(255,69,39,0.45); } 50% { box-shadow: 0 0 14px rgba(255,69,39,0.75); } }
+  </style>
+</helmet>
+
+<div data-screen-label="App" style="{{ containerStyle }}">
+
+  <!-- MOBILE TOP BAR -->
+  <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#101317;border-bottom:1px solid #1F242B;position:sticky;top:0;z-index:5;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:28px;height:28px;border:2px solid #FF4527;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;color:#FF4527;">C/D</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#E7EAEE;">COMANDO DEL DÍA</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;font-family:'JetBrains Mono',monospace;font-size:12px;">
+        <div style="color:#FF4527;font-weight:700;">{{ streak }}d</div>
+        <div style="color:#8B93A1;">{{ points }}pt</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- SIDEBAR -->
+  <sc-if value="{{ isNotMobile }}" hint-placeholder-val="{{ true }}">
+  <div style="width:236px;flex-shrink:0;background:#101317;border-right:1px solid #1F242B;display:flex;flex-direction:column;justify-content:space-between;padding:24px 16px;position:sticky;top:0;height:100vh;">
+    <div style="display:flex;flex-direction:column;gap:36px;">
+      <div style="display:flex;flex-direction:column;gap:6px;padding-bottom:20px;border-bottom:1px solid #1F242B;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:34px;height:34px;border:2px solid #FF4527;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:#FF4527;">C/D</div>
+          <div style="display:flex;flex-direction:column;">
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;letter-spacing:0.02em;color:#E7EAEE;">COMANDO DEL DÍA</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#5B6472;">CENTRO DE MANDO PERSONAL</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div onClick="{{ goDashboard }}" style="display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:8px;cursor:pointer;background:#14171B;">
+          <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}"><div style="width:4px;height:16px;background:#FF4527;border-radius:2px;margin-left:-4px;"></div></sc-if>
+          <sc-if value="{{ isNotDashboard }}" hint-placeholder-val="{{ false }}"><div style="width:4px;height:16px;background:transparent;margin-left:-4px;"></div></sc-if>
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;letter-spacing:0.03em;color:#E7EAEE;">HOY</div>
+        </div>
+        <div onClick="{{ goNew }}" style="display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:8px;cursor:pointer;background:#14171B;">
+          <sc-if value="{{ isNew }}" hint-placeholder-val="{{ false }}"><div style="width:4px;height:16px;background:#FF4527;border-radius:2px;margin-left:-4px;"></div></sc-if>
+          <sc-if value="{{ isNotNew }}" hint-placeholder-val="{{ true }}"><div style="width:4px;height:16px;background:transparent;margin-left:-4px;"></div></sc-if>
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;letter-spacing:0.03em;color:#E7EAEE;">NUEVA TAREA</div>
+        </div>
+        <div onClick="{{ goStats }}" style="display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:8px;cursor:pointer;background:#14171B;">
+          <sc-if value="{{ isStats }}" hint-placeholder-val="{{ false }}"><div style="width:4px;height:16px;background:#FF4527;border-radius:2px;margin-left:-4px;"></div></sc-if>
+          <sc-if value="{{ isNotStats }}" hint-placeholder-val="{{ true }}"><div style="width:4px;height:16px;background:transparent;margin-left:-4px;"></div></sc-if>
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;letter-spacing:0.03em;color:#E7EAEE;">ESTADÍSTICAS</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;padding:14px;background:#14171B;border:1px solid #262B33;border-radius:10px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#5B6472;">RANGO</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#5B6472;">NIVEL {{ level }}</div>
+      </div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#FF4527;">{{ rank }}</div>
+      <div style="width:100%;height:6px;background:#1F242B;border-radius:3px;overflow:hidden;">
+        <div style="{{ levelBarStyle }}"></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;color:#8B93A1;">
+        <div>{{ points }} PTS</div>
+        <div>+{{ pointsToNext }} sig.</div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;bottom:0;left:0;right:0;display:flex;background:#101317;border-top:1px solid #1F242B;padding:8px 8px calc(8px + env(safe-area-inset-bottom));z-index:10;">
+      <div onClick="{{ goDashboard }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;cursor:pointer;">
+        <div style="width:18px;height:3px;border-radius:2px;background:{{ dashBarColor }};"></div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;color:#E7EAEE;">HOY</div>
+      </div>
+      <div onClick="{{ goNew }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;cursor:pointer;">
+        <div style="width:18px;height:3px;border-radius:2px;background:{{ newBarColor }};"></div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;color:#E7EAEE;">NUEVA</div>
+      </div>
+      <div onClick="{{ goStats }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;cursor:pointer;">
+        <div style="width:18px;height:3px;border-radius:2px;background:{{ statsBarColor }};"></div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;color:#E7EAEE;">STATS</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- MAIN -->
+  <div style="{{ mainContentStyle }}">
+
+    <!-- ===== DASHBOARD ===== -->
+    <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+      <div data-screen-label="Hoy" style="display:flex;flex-direction:column;gap:24px;max-width:1180px;">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:#5B6472;">{{ todayLabel }}</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;color:#E7EAEE;margin-top:4px;">Informe de hoy</div>
+          </div>
+        </div>
+
+        <sc-if value="{{ streakAtRisk }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;background:#2A1712;border:1px solid #FF4527;border-radius:10px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;letter-spacing:0.1em;color:#FF6B45;padding:4px 8px;border:1px solid #FF6B45;border-radius:4px;flex-shrink:0;">ALERTA</div>
+            <div style="font-family:'Inter',sans-serif;font-size:13px;color:#F3B7A8;">Racha en riesgo. Completa al menos una tarea hoy antes de medianoche o la cadena se rompe.</div>
+          </div>
+        </sc-if>
+
+        <div style="{{ dashStatsGridStyle }}">
+          <div style="background:#14171B;border:1px solid #262B33;border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#5B6472;">RACHA ACTIVA</div>
+            <div style="display:flex;align-items:baseline;gap:8px;">
+              <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:32px;color:#FF4527;">{{ streak }}</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8B93A1;">días</div>
+            </div>
+            <div style="display:flex;gap:5px;align-items:center;">
+              <sc-for list="{{ miniChain }}" as="day" hint-placeholder-count="14">
+                <div style="{{ day.style }}"></div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background:#14171B;border:1px solid #262B33;border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:8px;justify-content:center;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#5B6472;">PUNTOS TOTALES</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:32px;color:#E7EAEE;">{{ points }}</div>
+          </div>
+          <div style="background:#14171B;border:1px solid #262B33;border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:8px;justify-content:center;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#5B6472;">RANGO ACTUAL</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:#E7EAEE;">{{ rank }}</div>
+          </div>
+        </div>
+
+        <sc-if value="{{ hasPriority }}" hint-placeholder-val="{{ true }}">
+          <div style="position:relative;background:#14171B;border:1px solid #333A44;border-radius:14px;padding:28px 32px;">
+            <div style="position:absolute;top:-1px;left:-1px;width:18px;height:18px;border-top:2px solid #FF4527;border-left:2px solid #FF4527;border-radius:6px 0 0 0;"></div>
+            <div style="position:absolute;top:-1px;right:-1px;width:18px;height:18px;border-top:2px solid #FF4527;border-right:2px solid #FF4527;border-radius:0 6px 0 0;"></div>
+            <div style="position:absolute;bottom:-1px;left:-1px;width:18px;height:18px;border-bottom:2px solid #FF4527;border-left:2px solid #FF4527;border-radius:0 0 0 6px;"></div>
+            <div style="position:absolute;bottom:-1px;right:-1px;width:18px;height:18px;border-bottom:2px solid #FF4527;border-right:2px solid #FF4527;border-radius:0 0 6px 0;"></div>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+              <div style="display:flex;flex-direction:column;gap:14px;min-width:0;flex:1;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;color:#5B6472;">OBJETIVO PRIORITARIO</div>
+                  <div style="{{ priority.tagStyle }}">{{ priority.metaLabel }}</div>
+                </div>
+                <div style="{{ priorityTitleStyle }}">{{ priority.title }}</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8B93A1;">{{ priority.meta }} · otorga +{{ priority.points }} pts</div>
+              </div>
+              <div style="display:flex;gap:10px;flex-shrink:0;">
+                <div onClick="{{ priority.open }}" style="padding:12px 18px;border:1px solid #333A44;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:#E7EAEE;cursor:pointer;">Ver ticket</div>
+                <div onClick="{{ priority.complete }}" style="padding:12px 18px;background:#FF4527;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#0B0D10;cursor:pointer;">Marcar cumplido</div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasNoPriority }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#14171B;border:1px solid #262B33;border-radius:14px;padding:32px;text-align:center;">
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:#3ED598;">Terreno despejado, soldado.</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5B6472;margin-top:6px;">No hay objetivos pendientes ahora mismo.</div>
+          </div>
+        </sc-if>
+
+        <div style="{{ quadrantGridStyle }}">
+          <div style="background:#14171B;border:1px solid #262B33;border-top:3px solid #FF4527;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-height:170px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#FF4527;">CRÍTICO</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5B6472;">{{ q1.length }} · urgente + importante</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <sc-for list="{{ q1 }}" as="item" hint-placeholder-count="1">
+                <div onClick="{{ item.open }}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:#1B1F25;border:1px solid #262B33;border-radius:8px;cursor:pointer;">
+                  <div style="min-width:0;">
+                    <div style="font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:#E7EAEE;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ item.title }}</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8B93A1;margin-top:2px;">{{ item.meta }}</div>
+                  </div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#FF4527;font-weight:700;flex-shrink:0;">+{{ item.points }}</div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ q1Empty }}" hint-placeholder-val="{{ false }}"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A515C;padding:6px 2px;">Sin pendientes en este cuadrante.</div></sc-if>
+            </div>
+          </div>
+
+          <div style="background:#14171B;border:1px solid #262B33;border-top:3px solid #3ED598;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-height:170px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#3ED598;">ESTRATÉGICO</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5B6472;">{{ q2.length }} · importante</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <sc-for list="{{ q2 }}" as="item" hint-placeholder-count="1">
+                <div onClick="{{ item.open }}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:#1B1F25;border:1px solid #262B33;border-radius:8px;cursor:pointer;">
+                  <div style="min-width:0;">
+                    <div style="font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:#E7EAEE;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ item.title }}</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8B93A1;margin-top:2px;">{{ item.meta }}</div>
+                  </div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#3ED598;font-weight:700;flex-shrink:0;">+{{ item.points }}</div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ q2Empty }}" hint-placeholder-val="{{ false }}"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A515C;padding:6px 2px;">Sin pendientes en este cuadrante.</div></sc-if>
+            </div>
+          </div>
+
+          <div style="background:#14171B;border:1px solid #262B33;border-top:3px solid #F5B93F;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-height:170px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#F5B93F;">TÁCTICO</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5B6472;">{{ q3.length }} · urgente</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <sc-for list="{{ q3 }}" as="item" hint-placeholder-count="1">
+                <div onClick="{{ item.open }}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:#1B1F25;border:1px solid #262B33;border-radius:8px;cursor:pointer;">
+                  <div style="min-width:0;">
+                    <div style="font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:#E7EAEE;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ item.title }}</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8B93A1;margin-top:2px;">{{ item.meta }}</div>
+                  </div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#F5B93F;font-weight:700;flex-shrink:0;">+{{ item.points }}</div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ q3Empty }}" hint-placeholder-val="{{ false }}"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A515C;padding:6px 2px;">Sin pendientes en este cuadrante.</div></sc-if>
+            </div>
+          </div>
+
+          <div style="background:#14171B;border:1px solid #262B33;border-top:3px solid #5B6472;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-height:170px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#8B93A1;">EN ESPERA</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5B6472;">{{ q4.length }} · ni urgente ni importante</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <sc-for list="{{ q4 }}" as="item" hint-placeholder-count="1">
+                <div onClick="{{ item.open }}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:#1B1F25;border:1px solid #262B33;border-radius:8px;cursor:pointer;">
+                  <div style="min-width:0;">
+                    <div style="font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:#E7EAEE;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ item.title }}</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8B93A1;margin-top:2px;">{{ item.meta }}</div>
+                  </div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8B93A1;font-weight:700;flex-shrink:0;">+{{ item.points }}</div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ q4Empty }}" hint-placeholder-val="{{ false }}"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A515C;padding:6px 2px;">Sin pendientes en este cuadrante.</div></sc-if>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ===== DETALLE ===== -->
+    <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Detalle de tarea" style="display:flex;flex-direction:column;gap:20px;max-width:1100px;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div onClick="{{ goDashboard }}" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8B93A1;cursor:pointer;padding:6px 10px;border:1px solid #262B33;border-radius:6px;">&larr; VOLVER</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#5B6472;">{{ selectedTask.breadcrumb }}</div>
+        </div>
+
+        <div style="{{ detailGridStyle }}">
+          <div style="background:#14171B;border:1px solid #262B33;border-radius:12px;padding:26px;display:flex;flex-direction:column;gap:22px;">
+            <div>
+              <div style="{{ selectedTask.tagStyle }}">{{ selectedTask.metaLabel }}</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;color:#E7EAEE;margin-top:12px;">{{ selectedTask.title }}</div>
+            </div>
+            <div style="font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;color:#B8BFC9;">{{ selectedTask.description }}</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#5B6472;">CHECKLIST — {{ selectedTask.doneCount }}/{{ selectedTask.total }}</div>
+              <sc-for list="{{ selectedTask.subtasks }}" as="sub" hint-placeholder-count="3">
+                <div onClick="{{ sub.toggle }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:#1B1F25;border:1px solid #262B33;border-radius:8px;cursor:pointer;">
+                  <div style="{{ sub.boxStyle }}"></div>
+                  <div style="{{ sub.textStyle }}">{{ sub.text }}</div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ selectedTaskNoSubtasks }}" hint-placeholder-val="{{ false }}"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A515C;">Sin subtareas registradas.</div></sc-if>
+            </div>
+          </div>
+
+          <div style="background:#14171B;border:1px solid #262B33;border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:18px;">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#5B6472;">ESTADO</div>
+              <div style="{{ selectedTask.statusStyle }}">{{ selectedTask.statusLabel }}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#5B6472;">CUADRANTE</div>
+              <div style="font-family:'Inter',sans-serif;font-size:13px;color:#E7EAEE;">{{ selectedTask.metaSub }}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#5B6472;">FECHA LÍMITE</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#E7EAEE;">{{ selectedTask.dueLabel }}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#5B6472;">PUNTOS QUE OTORGA</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:20px;color:#FF4527;">+{{ selectedTask.points }}</div>
+            </div>
+            <div onClick="{{ selectedTask.complete }}" style="{{ selectedTask.buttonStyle }}">{{ selectedTask.buttonLabel }}</div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ===== NUEVA TAREA ===== -->
+    <sc-if value="{{ isNew }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Nueva tarea" style="display:flex;flex-direction:column;gap:20px;max-width:1080px;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;color:#E7EAEE;">Desplegar nuevo objetivo</div>
+        <div style="{{ formGridStyle }}">
+          <div style="background:#14171B;border:1px solid #262B33;border-radius:12px;padding:26px;display:flex;flex-direction:column;gap:18px;">
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#5B6472;">TÍTULO</div>
+              <input value="{{ draft.title }}" onChange="{{ setDraftTitle }}" placeholder="Ej. Terminar propuesta del cliente" style="width:100%;padding:12px 14px;background:#1B1F25;border:1px solid #333A44;border-radius:8px;color:#E7EAEE;font-size:14px;"></input>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#5B6472;">DESCRIPCIÓN</div>
+              <textarea value="{{ draft.description }}" onChange="{{ setDraftDescription }}" placeholder="Detalles, contexto, criterios de éxito..." style="width:100%;min-height:110px;padding:12px 14px;background:#1B1F25;border:1px solid #333A44;border-radius:8px;color:#E7EAEE;font-size:14px;resize:vertical;"></textarea>
+            </div>
+            <div style="{{ formFieldsGridStyle }}">
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#5B6472;">FECHA LÍMITE (OPCIONAL)</div>
+                <input type="date" value="{{ draft.dueDate }}" onChange="{{ setDraftDue }}" style="width:100%;padding:11px 14px;background:#1B1F25;border:1px solid #333A44;border-radius:8px;color:#E7EAEE;font-family:'JetBrains Mono',monospace;font-size:13px;"></input>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#5B6472;">¿ES DE ALTO IMPACTO?</div>
+                <div onClick="{{ toggleDraftImportant }}" style="{{ importantToggleStyle }}">
+                  <div style="{{ importantKnobStyle }}"></div>
+                  <div style="font-family:'Inter',sans-serif;font-weight:600;font-size:12px;">{{ importantLabel }}</div>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#5B6472;">SUBTAREAS</div>
+              <div style="display:flex;gap:8px;">
+                <input value="{{ draft.subtaskInput }}" onChange="{{ setSubtaskInput }}" placeholder="Agregar paso..." style="flex:1;padding:10px 12px;background:#1B1F25;border:1px solid #333A44;border-radius:8px;color:#E7EAEE;font-size:13px;"></input>
+                <div onClick="{{ addDraftSubtask }}" style="padding:10px 16px;background:#1F242B;border:1px solid #333A44;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:#E7EAEE;cursor:pointer;">Agregar</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <sc-for list="{{ draft.subtasks }}" as="sub" hint-placeholder-count="0">
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#1B1F25;border:1px solid #262B33;border-radius:6px;">
+                    <div style="font-family:'Inter',sans-serif;font-size:13px;color:#B8BFC9;">{{ sub.text }}</div>
+                    <div onClick="{{ sub.remove }}" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8B93A1;cursor:pointer;">Quitar</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div onClick="{{ submitDraft }}" style="{{ submitButtonStyle }}">DESPLEGAR TAREA</div>
+          </div>
+
+          <div style="background:#14171B;border:1px solid #262B33;border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:16px;position:sticky;top:20px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#5B6472;">CLASIFICACIÓN AUTOMÁTICA</div>
+            <div style="{{ draftPreview.tagStyle }}">{{ draftPreview.label }}</div>
+            <div style="font-family:'Inter',sans-serif;font-size:13px;color:#8B93A1;line-height:1.5;">{{ draftPreview.explanation }}</div>
+            <div style="display:flex;flex-direction:column;gap:4px;padding-top:10px;border-top:1px solid #262B33;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#5B6472;">OTORGARÁ</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:24px;color:#E7EAEE;">+{{ draftPreview.points }} pts</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ===== ESTADÍSTICAS ===== -->
+    <sc-if value="{{ isStats }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Estadísticas" style="display:flex;flex-direction:column;gap:22px;max-width:1180px;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;color:#E7EAEE;">Estadísticas de operación</div>
+
+        <div style="{{ statsTopGridStyle }}">
+          <div style="background:#14171B;border:1px solid #262B33;border-radius:10px;padding:18px 20px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#5B6472;">RACHA ACTUAL</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;color:#FF4527;margin-top:6px;">{{ streak }} días</div>
+          </div>
+          <div style="background:#14171B;border:1px solid #262B33;border-radius:10px;padding:18px 20px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#5B6472;">RACHA MÁXIMA</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;color:#E7EAEE;margin-top:6px;">{{ maxStreak }} días</div>
+          </div>
+          <div style="background:#14171B;border:1px solid #262B33;border-radius:10px;padding:18px 20px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#5B6472;">PUNTOS TOTALES</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;color:#E7EAEE;margin-top:6px;">{{ points }}</div>
+          </div>
+          <div style="background:#14171B;border:1px solid #262B33;border-radius:10px;padding:18px 20px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#5B6472;">TAREAS COMPLETADAS</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;color:#E7EAEE;margin-top:6px;">{{ totalCompleted }}</div>
+          </div>
+        </div>
+
+        <div style="background:#14171B;border:1px solid #262B33;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:14px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#5B6472;">REGISTRO DE CADENA — ÚLTIMAS 12 SEMANAS</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <sc-for list="{{ weeksForStats }}" as="week" hint-placeholder-count="12">
+              <div style="display:flex;align-items:center;gap:16px;">
+                <div style="width:70px;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:11px;color:#5B6472;">{{ week.label }}</div>
+                <div style="display:flex;gap:5px;">
+                  <sc-for list="{{ week.days }}" as="day" hint-placeholder-count="7">
+                    <div style="{{ day.style }}"></div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="{{ statsBottomGridStyle }}">
+          <div style="background:#14171B;border:1px solid #262B33;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#5B6472;">PUNTOS POR SEMANA</div>
+            <div style="display:flex;align-items:flex-end;gap:14px;height:160px;">
+              <sc-for list="{{ weeklyBars }}" as="bar" hint-placeholder-count="6">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;height:100%;justify-content:flex-end;">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8B93A1;">{{ bar.value }}</div>
+                  <div style="{{ bar.style }}"></div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5B6472;">{{ bar.label }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:#14171B;border:1px solid #262B33;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:14px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#5B6472;">COMPLETADAS POR CUADRANTE</div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="display:flex;align-items:center;gap:10px;"><div style="width:9px;height:9px;border-radius:50%;background:#FF4527;"></div><div style="font-family:'Inter',sans-serif;font-size:13px;color:#E7EAEE;">Crítico</div></div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#8B93A1;">{{ completedQ1 }}</div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="display:flex;align-items:center;gap:10px;"><div style="width:9px;height:9px;border-radius:50%;background:#3ED598;"></div><div style="font-family:'Inter',sans-serif;font-size:13px;color:#E7EAEE;">Estratégico</div></div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#8B93A1;">{{ completedQ2 }}</div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="display:flex;align-items:center;gap:10px;"><div style="width:9px;height:9px;border-radius:50%;background:#F5B93F;"></div><div style="font-family:'Inter',sans-serif;font-size:13px;color:#E7EAEE;">Táctico</div></div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#8B93A1;">{{ completedQ3 }}</div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="display:flex;align-items:center;gap:10px;"><div style="width:9px;height:9px;border-radius:50%;background:#5B6472;"></div><div style="font-family:'Inter',sans-serif;font-size:13px;color:#E7EAEE;">En espera</div></div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#8B93A1;">{{ completedQ4 }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const DAY_MS = 86400000;
+const QUADRANT_META = {
+  1: { key: 1, label: 'CRÍTICO', sub: 'Urgente + Importante', color: '#FF4527', dim: '#3A1712' },
+  2: { key: 2, label: 'ESTRATÉGICO', sub: 'Importante, no urgente', color: '#3ED598', dim: '#12302A' },
+  3: { key: 3, label: 'TÁCTICO', sub: 'Urgente, no importante', color: '#F5B93F', dim: '#3A2F12' },
+  4: { key: 4, label: 'EN ESPERA', sub: 'Ni urgente ni importante', color: '#5B6472', dim: '#1B2026' },
+};
+const POINTS_FOR = { 1: 60, 2: 35, 3: 20, 4: 8 };
+const DIAS_ES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const MESES_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const MESES_ES_SHORT = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+
+let uidCounter = 5000;
+function uid() { return uidCounter++; }
+
+function todayMidnight() {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+function addDays(date, n) {
+  return new Date(date.getTime() + n * DAY_MS);
+}
+function toISO(date) {
+  return date.toISOString().slice(0, 10);
+}
+function isUrgent(dueDate) {
+  if (!dueDate) return false;
+  const today = todayMidnight();
+  const d = new Date(dueDate + 'T00:00:00');
+  const diff = Math.round((d - today) / DAY_MS);
+  return diff <= 1;
+}
+function quadrantOf(task) {
+  const u = isUrgent(task.dueDate);
+  const i = !!task.important;
+  if (u && i) return 1;
+  if (i && !u) return 2;
+  if (u && !i) return 3;
+  return 4;
+}
+function dueLabelFor(dueDate) {
+  if (!dueDate) return 'Sin fecha límite';
+  const today = todayMidnight();
+  const d = new Date(dueDate + 'T00:00:00');
+  const diff = Math.round((d - today) / DAY_MS);
+  if (diff < 0) return 'Vencida';
+  if (diff === 0) return 'Vence hoy';
+  if (diff === 1) return 'Vence mañana';
+  return 'Vence en ' + diff + ' días';
+}
+function formatLongDateEs(date) {
+  return DIAS_ES[date.getDay()] + ', ' + date.getDate() + ' de ' + MESES_ES[date.getMonth()] + ' de ' + date.getFullYear();
+}
+function formatShortDateEs(date) {
+  return date.getDate() + ' ' + MESES_ES_SHORT[date.getMonth()];
+}
+
+function seedTasks() {
+  const today = todayMidnight();
+  const t0 = toISO(today);
+  const t1 = toISO(addDays(today, 1));
+  const t10 = toISO(addDays(today, 10));
+  return [
+    { id: uid(), title: 'Entregar reporte fiscal trimestral', description: 'Consolidar cifras de ingresos y gastos del trimestre, generar el PDF final y enviarlo a contabilidad antes del cierre de operaciones.', dueDate: t0, important: true, status: 'pending', subtasks: [
+      { id: uid(), text: 'Recolectar facturas pendientes', done: true },
+      { id: uid(), text: 'Consolidar hoja de cálculo', done: true },
+      { id: uid(), text: 'Revisar cifras con contador', done: false },
+      { id: uid(), text: 'Enviar PDF final', done: false },
+    ]},
+    { id: uid(), title: 'Confirmar pago de renta', description: 'Transferir el pago de renta del mes y guardar el comprobante en la carpeta compartida.', dueDate: t1, important: true, status: 'pending', subtasks: [
+      { id: uid(), text: 'Verificar saldo disponible', done: true },
+      { id: uid(), text: 'Realizar transferencia', done: false },
+      { id: uid(), text: 'Guardar comprobante', done: false },
+    ]},
+    { id: uid(), title: 'Planear rutina de ejercicio semanal', description: 'Diseñar un plan de entrenamiento de 4 días considerando el horario de trabajo, con enfoque en fuerza y cardio.', dueDate: t10, important: true, status: 'pending', subtasks: [
+      { id: uid(), text: 'Elegir días de entrenamiento', done: true },
+      { id: uid(), text: 'Buscar rutina de fuerza', done: false },
+      { id: uid(), text: 'Agendar en calendario', done: false },
+    ]},
+    { id: uid(), title: 'Actualizar CV y portafolio', description: 'Revisar experiencia reciente, actualizar proyectos destacados y exportar versión en PDF.', dueDate: '', important: true, status: 'pending', subtasks: [
+      { id: uid(), text: 'Actualizar experiencia', done: false },
+      { id: uid(), text: 'Actualizar proyectos', done: false },
+    ]},
+    { id: uid(), title: 'Responder correos acumulados', description: 'Vaciar la bandeja de entrada respondiendo o archivando los correos pendientes de esta semana.', dueDate: t0, important: false, status: 'pending', subtasks: [
+      { id: uid(), text: 'Clasificar por urgencia', done: true },
+      { id: uid(), text: 'Responder los 5 más antiguos', done: false },
+    ]},
+    { id: uid(), title: 'Agendar cita al dentista', description: 'Llamar al consultorio para agendar la revisión semestral.', dueDate: t1, important: false, status: 'pending', subtasks: [] },
+    { id: uid(), title: 'Organizar fotos del celular', description: 'Eliminar duplicados y hacer respaldo de las fotos del último año.', dueDate: '', important: false, status: 'pending', subtasks: [
+      { id: uid(), text: 'Eliminar duplicados', done: false },
+      { id: uid(), text: 'Subir respaldo a la nube', done: false },
+    ]},
+    { id: uid(), title: 'Probar nueva app de notas', description: 'Evaluar si vale la pena migrar el sistema de notas actual.', dueDate: '', important: false, status: 'pending', subtasks: [] },
+  ];
+}
+
+function seedHistory() {
+  const days = [];
+  for (let i = 83; i >= 1; i--) {
+    const active = !(i % 9 === 0 || i === 45 || i === 46 || i === 70);
+    days.push({ offset: i, active });
+  }
+  return days;
+}
+
+function initialState() {
+  return {
+    view: 'dashboard',
+    selectedTaskId: null,
+    points: 460,
+    todayCompleted: false,
+    tasks: seedTasks(),
+    history: seedHistory(),
+    weeklyPoints: [520, 610, 340, 780, 690, 460],
+    draft: { title: '', description: '', dueDate: '', important: false, subtaskInput: '', subtasks: [] },
+    isMobile: (typeof window !== 'undefined' && window.innerWidth <= 760),
+  };
+}
+
+function linkStyle(active, isToday, index) {
+  const base = { width: '13px', height: '25px', borderRadius: '6px', flexShrink: 0, boxSizing: 'border-box', transform: 'translateY(' + (index % 2 === 0 ? '0px' : '4px') + ')' };
+  if (active) return { ...base, background: '#FF4527', border: '2px solid #FF6B45', animation: 'cdGlow 2.4s ease-in-out infinite' };
+  if (isToday) return { ...base, background: 'transparent', border: '2px dashed #F5B93F', animation: 'cdPulse 1.8s ease-in-out infinite' };
+  return { ...base, background: 'transparent', border: '2px solid #262B33' };
+}
+
+function tagStyleFor(color, dim) {
+  return { display: 'inline-flex', alignItems: 'center', padding: '5px 10px', borderRadius: '5px', background: dim, color: color, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: '11px', letterSpacing: '0.06em', border: '1px solid ' + color };
+}
+
+class Component extends DCLogic {
+  state = initialState();
+
+  componentDidMount() {
+    this._onResize = () => this.setState({ isMobile: window.innerWidth <= 760 });
+    window.addEventListener('resize', this._onResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._onResize);
+  }
+
+  computeStreak(history, todayCompleted) {
+    let streak = todayCompleted ? 1 : 0;
+    for (let i = history.length - 1; i >= 0; i--) {
+      if (history[i].active) streak++;
+      else break;
+    }
+    return streak;
+  }
+
+  computeMaxStreak(history, todayCompleted) {
+    const all = history.map(h => h.active).concat([todayCompleted]);
+    let max = 0, cur = 0;
+    for (const a of all) {
+      if (a) { cur++; max = Math.max(max, cur); } else cur = 0;
+    }
+    return max;
+  }
+
+  completeTask(id) {
+    this.setState(s => {
+      const q = quadrantOf(s.tasks.find(t => t.id === id));
+      const tasks = s.tasks.map(t => t.id === id && t.status === 'pending' ? { ...t, status: 'done', completedQuadrant: q } : t);
+      return { tasks, points: s.points + POINTS_FOR[q], todayCompleted: true };
+    });
+  }
+
+  toggleSubtask(taskId, subId) {
+    this.setState(s => ({
+      tasks: s.tasks.map(t => t.id === taskId ? { ...t, subtasks: t.subtasks.map(x => x.id === subId ? { ...x, done: !x.done } : x) } : t)
+    }));
+  }
+
+  renderVals() {
+    const s = this.state;
+    const today = todayMidnight();
+
+    const tasksMeta = s.tasks.map(t => {
+      const q = t.status === 'done' ? (t.completedQuadrant || quadrantOf(t)) : quadrantOf(t);
+      const meta = QUADRANT_META[q];
+      const doneCount = t.subtasks.filter(x => x.done).length;
+      const total = t.subtasks.length;
+      const dueLabel = dueLabelFor(t.dueDate);
+      return {
+        ...t,
+        quadrant: q,
+        metaLabel: meta.label,
+        metaSub: meta.sub,
+        tagStyle: tagStyleFor(meta.color, meta.dim),
+        points: POINTS_FOR[q],
+        doneCount, total,
+        dueLabel,
+        meta: dueLabel + (total ? ' · ' + doneCount + '/' + total + ' subtareas' : ''),
+        open: () => this.setState({ view: 'detail', selectedTaskId: t.id }),
+        complete: () => this.completeTask(t.id),
+      };
+    });
+
+    const pending = tasksMeta.filter(t => t.status === 'pending');
+    const byQ = q => pending.filter(t => t.quadrant === q).sort((a, b) => (a.dueDate || '9999-99-99') > (b.dueDate || '9999-99-99') ? 1 : -1);
+    const q1 = byQ(1), q2 = byQ(2), q3 = byQ(3), q4 = byQ(4);
+    const priority = q1[0] || q2[0] || q3[0] || q4[0] || null;
+
+    const streak = this.computeStreak(s.history, s.todayCompleted);
+    const maxStreak = this.computeMaxStreak(s.history, s.todayCompleted);
+    const streakAtRisk = !s.todayCompleted;
+
+    const level = Math.floor(s.points / 300) + 1;
+    const ranks = ['RECLUTA', 'CABO', 'SARGENTO', 'TENIENTE', 'CAPITÁN', 'COMANDANTE', 'GENERAL'];
+    const rank = ranks[Math.min(level - 1, ranks.length - 1)];
+    const pointsToNext = level * 300 - s.points;
+    const levelProgress = Math.round(((s.points - (level - 1) * 300) / 300) * 100);
+
+    const combined = s.history.map(h => ({ date: addDays(today, -h.offset), active: h.active, isToday: false }));
+    combined.push({ date: today, active: s.todayCompleted, isToday: true });
+
+    const miniChain = combined.slice(-14).map((d, idx) => ({ id: 'mini' + idx, style: linkStyle(d.active, d.isToday, idx) }));
+
+    const weeksForStats = [];
+    for (let w = 0; w < 12; w++) {
+      const chunk = combined.slice(w * 7, w * 7 + 7);
+      weeksForStats.push({
+        id: 'week' + w,
+        label: chunk.length ? formatShortDateEs(chunk[0].date) : '',
+        days: chunk.map((d, idx) => ({ id: 'w' + w + 'd' + idx, style: linkStyle(d.active, d.isToday, idx) })),
+      });
+    }
+
+    const weeklyMax = Math.max(...s.weeklyPoints, 1);
+    const weekLabels = ['S-5', 'S-4', 'S-3', 'S-2', 'S-1', 'ESTA'];
+    const weeklyBars = s.weeklyPoints.map((v, idx) => ({
+      id: 'bar' + idx,
+      value: v,
+      label: weekLabels[idx],
+      style: { width: '100%', maxWidth: '38px', height: Math.max(6, Math.round((v / weeklyMax) * 130)) + 'px', background: idx === s.weeklyPoints.length - 1 ? '#FF4527' : '#333A44', borderRadius: '4px 4px 0 0' },
+    }));
+
+    const done = tasksMeta.filter(t => t.status === 'done');
+    const completedQ1 = done.filter(t => t.quadrant === 1).length;
+    const completedQ2 = done.filter(t => t.quadrant === 2).length;
+    const completedQ3 = done.filter(t => t.quadrant === 3).length;
+    const completedQ4 = done.filter(t => t.quadrant === 4).length;
+
+    const selectedTaskRaw = tasksMeta.find(t => t.id === s.selectedTaskId) || null;
+    const selectedTask = selectedTaskRaw ? {
+      ...selectedTaskRaw,
+      breadcrumb: 'HOY / TICKET-' + selectedTaskRaw.id,
+      statusLabel: selectedTaskRaw.status === 'done' ? 'COMPLETADA' : 'PENDIENTE',
+      statusStyle: { display: 'inline-flex', width: 'fit-content', padding: '5px 10px', borderRadius: '5px', fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: '11px', letterSpacing: '0.06em', background: selectedTaskRaw.status === 'done' ? '#12302A' : '#1F242B', color: selectedTaskRaw.status === 'done' ? '#3ED598' : '#8B93A1', border: '1px solid ' + (selectedTaskRaw.status === 'done' ? '#3ED598' : '#333A44') },
+      buttonLabel: selectedTaskRaw.status === 'done' ? 'COMPLETADA ✓' : 'MARCAR COMO COMPLETADA',
+      buttonStyle: { textAlign: 'center', padding: '13px 16px', borderRadius: '8px', fontFamily: "'Space Grotesk',sans-serif", fontWeight: 700, fontSize: '13px', cursor: selectedTaskRaw.status === 'done' ? 'default' : 'pointer', background: selectedTaskRaw.status === 'done' ? '#1F242B' : '#FF4527', color: selectedTaskRaw.status === 'done' ? '#5B6472' : '#0B0D10' },
+      subtasks: selectedTaskRaw.subtasks.map(sub => ({
+        ...sub,
+        toggle: () => this.toggleSubtask(selectedTaskRaw.id, sub.id),
+        boxStyle: { width: '16px', height: '16px', borderRadius: '4px', flexShrink: 0, border: '2px solid ' + (sub.done ? '#3ED598' : '#5B6472'), background: sub.done ? '#3ED598' : 'transparent' },
+        textStyle: { fontFamily: "'Inter',sans-serif", fontSize: '13px', color: sub.done ? '#5B6472' : '#E7EAEE', textDecoration: sub.done ? 'line-through' : 'none' },
+      })),
+    } : null;
+
+    const draftUrgent = isUrgent(s.draft.dueDate);
+    const draftQ = draftUrgent && s.draft.important ? 1 : (s.draft.important && !draftUrgent ? 2 : (draftUrgent && !s.draft.important ? 3 : 4));
+    const draftMeta = QUADRANT_META[draftQ];
+    const draftPreview = {
+      label: draftMeta.label,
+      tagStyle: tagStyleFor(draftMeta.color, draftMeta.dim),
+      points: POINTS_FOR[draftQ],
+      explanation: 'Urgencia: ' + (draftUrgent ? 'sí (fecha límite cercana o vencida)' : 'no') + '. Impacto declarado: ' + (s.draft.important ? 'alto' : 'normal') + '.',
+    };
+
+    const canSubmit = s.draft.title.trim().length > 0;
+    const isMobile = s.isMobile;
+
+    return {
+      isMobile, isNotMobile: !isMobile,
+      containerStyle: { display: 'flex', flexDirection: isMobile ? 'column' : 'row', minHeight: '100vh', width: '100%', background: '#0B0D10', color: '#E7EAEE', fontFamily: "'Inter',sans-serif" },
+      mainContentStyle: { flex: 1, minWidth: 0, padding: isMobile ? '18px 16px 90px 16px' : '36px 44px', overflowY: 'auto', backgroundImage: 'linear-gradient(#14171B 1px, transparent 1px),linear-gradient(90deg,#14171B 1px, transparent 1px)', backgroundSize: '64px 64px', backgroundPosition: '-1px -1px' },
+      dashStatsGridStyle: { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.3fr 1fr 1fr', gap: '16px' },
+      quadrantGridStyle: { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '16px' },
+      detailGridStyle: { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.6fr 1fr', gap: '20px', alignItems: 'start' },
+      formGridStyle: { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.5fr 1fr', gap: '20px', alignItems: 'start' },
+      formFieldsGridStyle: { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '16px' },
+      statsTopGridStyle: { display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap: '16px' },
+      statsBottomGridStyle: { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.4fr 1fr', gap: '20px', alignItems: 'start' },
+      priorityTitleStyle: { fontFamily: "'Space Grotesk',sans-serif", fontWeight: 700, fontSize: isMobile ? '24px' : '34px', lineHeight: 1.15, color: '#E7EAEE' },
+      dashBarColor: s.view === 'dashboard' ? '#FF4527' : 'transparent',
+      newBarColor: s.view === 'new' ? '#FF4527' : 'transparent',
+      statsBarColor: s.view === 'stats' ? '#FF4527' : 'transparent',
+
+      isDashboard: s.view === 'dashboard', isNotDashboard: s.view !== 'dashboard',
+      isDetail: s.view === 'detail',
+      isNew: s.view === 'new', isNotNew: s.view !== 'new',
+      isStats: s.view === 'stats', isNotStats: s.view !== 'stats',
+      goDashboard: () => this.setState({ view: 'dashboard' }),
+      goNew: () => this.setState({ view: 'new', draft: { title: '', description: '', dueDate: '', important: false, subtaskInput: '', subtasks: [] } }),
+      goStats: () => this.setState({ view: 'stats' }),
+
+      todayLabel: formatLongDateEs(today).toUpperCase(),
+      points: s.points, level, rank, pointsToNext,
+      levelBarStyle: { width: levelProgress + '%', height: '100%', background: '#FF4527', borderRadius: '3px' },
+
+      streak, maxStreak, streakAtRisk,
+      miniChain,
+
+      hasPriority: !!priority, hasNoPriority: !priority,
+      priority,
+
+      q1, q2, q3, q4,
+      q1Empty: q1.length === 0, q2Empty: q2.length === 0, q3Empty: q3.length === 0, q4Empty: q4.length === 0,
+
+      selectedTask,
+      selectedTaskNoSubtasks: !!(selectedTask && selectedTask.total === 0),
+
+      draft: { ...s.draft, subtasks: s.draft.subtasks.map(x => ({ ...x, remove: () => this.setState(st => ({ draft: { ...st.draft, subtasks: st.draft.subtasks.filter(y => y.id !== x.id) } })) })) },
+      setDraftTitle: e => this.setState(st => ({ draft: { ...st.draft, title: e.target.value } })),
+      setDraftDescription: e => this.setState(st => ({ draft: { ...st.draft, description: e.target.value } })),
+      setDraftDue: e => this.setState(st => ({ draft: { ...st.draft, dueDate: e.target.value } })),
+      toggleDraftImportant: () => this.setState(st => ({ draft: { ...st.draft, important: !st.draft.important } })),
+      setSubtaskInput: e => this.setState(st => ({ draft: { ...st.draft, subtaskInput: e.target.value } })),
+      addDraftSubtask: () => this.setState(st => {
+        const text = st.draft.subtaskInput.trim();
+        if (!text) return {};
+        const id = uid();
+        return { draft: { ...st.draft, subtaskInput: '', subtasks: [...st.draft.subtasks, { id, text }] } };
+      }),
+      importantToggleStyle: { display: 'flex', alignItems: 'center', gap: '10px', padding: '11px 14px', background: s.draft.important ? '#3A1712' : '#1B1F25', border: '1px solid ' + (s.draft.important ? '#FF4527' : '#333A44'), borderRadius: '8px', cursor: 'pointer', color: s.draft.important ? '#FF6B45' : '#8B93A1' },
+      importantKnobStyle: { width: '10px', height: '10px', borderRadius: '50%', background: s.draft.important ? '#FF4527' : '#5B6472', flexShrink: 0 },
+      importantLabel: s.draft.important ? 'SÍ, ES IMPORTANTE' : 'NO ES CRÍTICO',
+
+      draftPreview,
+      submitButtonStyle: { textAlign: 'center', padding: '14px 16px', borderRadius: '8px', fontFamily: "'Space Grotesk',sans-serif", fontWeight: 700, fontSize: '14px', letterSpacing: '0.04em', cursor: canSubmit ? 'pointer' : 'default', background: canSubmit ? '#FF4527' : '#1F242B', color: canSubmit ? '#0B0D10' : '#5B6472' },
+      submitDraft: () => {
+        if (!canSubmit) return;
+        this.setState(st => {
+          const newTask = {
+            id: uid(), title: st.draft.title.trim(), description: st.draft.description.trim() || 'Sin descripción adicional.',
+            dueDate: st.draft.dueDate, important: st.draft.important, status: 'pending',
+            subtasks: st.draft.subtasks.map(x => ({ id: x.id, text: x.text, done: false })),
+          };
+          return { tasks: [...st.tasks, newTask], view: 'dashboard' };
+        });
+      },
+
+      weeksForStats,
+      weeklyBars,
+      totalCompleted: done.length,
+      completedQ1, completedQ2, completedQ3, completedQ4,
+    };
+  }
+}
+
+// wire subtask remove handlers (need access to setState closures per-render, done inline above via patch)
+
+</script>
+</body>
+</html>

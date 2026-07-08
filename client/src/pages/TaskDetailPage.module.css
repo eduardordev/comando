@@ -1,0 +1,223 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1100px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.back {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 6px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.breadcrumb {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.gridMobile {
+  grid-template-columns: 1fr;
+}
+
+.main,
+.sidebar {
+  background: var(--card);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.sidebar {
+  padding: 22px;
+  gap: 18px;
+}
+
+.title {
+  margin: 12px 0 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  color: var(--text);
+}
+
+.description {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px 14px;
+  background: var(--card-inner);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  color: var(--text-body);
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.checklistSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checklistLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+.emptyChecklist {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-placeholder);
+  margin: 0;
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--card-inner);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  border: 2px solid var(--text-dim);
+  background: transparent;
+}
+
+.checkboxDone {
+  border-color: var(--green);
+  background: var(--green);
+}
+
+.checkText {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.checkTextDone {
+  font-size: 13px;
+  color: var(--text-dim);
+  text-decoration: line-through;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+.fieldValue {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.statusPending,
+.statusDone {
+  display: inline-flex;
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+.statusPending {
+  background: var(--border);
+  color: var(--text-muted);
+  border: 1px solid var(--border-input);
+}
+
+.statusDone {
+  background: #12302a;
+  color: var(--green);
+  border: 1px solid var(--green);
+}
+
+.points {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--accent);
+}
+
+.btnComplete,
+.btnDone,
+.btnDelete {
+  text-align: center;
+  padding: 13px 16px;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+}
+
+.btnComplete {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.btnDone {
+  background: var(--border);
+  color: var(--text-dim);
+  cursor: default;
+}
+
+.btnDelete {
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.saving {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  margin: 0;
+}
