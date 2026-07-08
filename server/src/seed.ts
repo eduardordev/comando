@@ -11,6 +11,7 @@ async function main() {
   const tasks = [
     {
       title: 'Entregar reporte fiscal trimestral',
+      area: 'Finanzas',
       description:
         'Consolidar cifras de ingresos y gastos del trimestre, generar el PDF final y enviarlo a contabilidad antes del cierre de operaciones.',
       urgent: true,
@@ -24,6 +25,7 @@ async function main() {
     },
     {
       title: 'Confirmar pago de renta',
+      area: 'Finanzas',
       description:
         'Transferir el pago de renta del mes y guardar el comprobante en la carpeta compartida.',
       urgent: true,
@@ -36,6 +38,7 @@ async function main() {
     },
     {
       title: 'Planear rutina de ejercicio semanal',
+      area: 'Salud',
       description:
         'Diseñar un plan de entrenamiento de 4 días considerando el horario de trabajo, con enfoque en fuerza y cardio.',
       urgent: false,
@@ -48,6 +51,7 @@ async function main() {
     },
     {
       title: 'Actualizar CV y portafolio',
+      area: 'Carrera',
       description:
         'Revisar experiencia reciente, actualizar proyectos destacados y exportar versión en PDF.',
       urgent: false,
@@ -59,6 +63,7 @@ async function main() {
     },
     {
       title: 'Responder correos acumulados',
+      area: 'Trabajo',
       description:
         'Vaciar la bandeja de entrada respondiendo o archivando los correos pendientes de esta semana.',
       urgent: true,
@@ -70,6 +75,7 @@ async function main() {
     },
     {
       title: 'Agendar cita al dentista',
+      area: 'Salud',
       description: 'Llamar al consultorio para agendar la revisión semestral.',
       urgent: true,
       important: false,
@@ -77,6 +83,7 @@ async function main() {
     },
     {
       title: 'Organizar fotos del celular',
+      area: 'Personal',
       description: 'Eliminar duplicados y hacer respaldo de las fotos del último año.',
       urgent: false,
       important: false,
@@ -87,6 +94,7 @@ async function main() {
     },
     {
       title: 'Probar nueva app de notas',
+      area: 'Personal',
       description: 'Evaluar si vale la pena migrar el sistema de notas actual.',
       urgent: false,
       important: false,
@@ -98,6 +106,7 @@ async function main() {
     await prisma.task.create({
       data: {
         title: t.title,
+        area: t.area ?? '',
         description: t.description,
         urgent: t.urgent,
         important: t.important,

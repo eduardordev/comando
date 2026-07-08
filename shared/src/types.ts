@@ -11,6 +11,7 @@ export interface ChecklistItem {
 export interface Task {
   id: string;
   title: string;
+  area: string;
   description: string;
   checklist: ChecklistItem[];
   urgent: boolean;
@@ -53,6 +54,7 @@ export interface StatsResponse {
 
 export interface CreateTaskInput {
   title: string;
+  area?: string;
   description?: string;
   urgent?: boolean;
   important?: boolean;
@@ -61,6 +63,7 @@ export interface CreateTaskInput {
 
 export interface UpdateTaskInput {
   title?: string;
+  area?: string;
   description?: string;
   urgent?: boolean;
   important?: boolean;

@@ -11,6 +11,7 @@ datasource db {
 model Task {
   id                   String    @id @default(uuid())
   title                String
+  area                 String    @default("")
   description          String    @default("")
   checklist            String    @default("[]")
   urgent               Boolean   @default(false)

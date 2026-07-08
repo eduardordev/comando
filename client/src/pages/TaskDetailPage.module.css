@@ -285,6 +285,16 @@
   color: var(--text);
 }
 
+.sidebarInput {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--card-inner);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 13px;
+}
+
 .statusPending,
 .statusDone {
   display: inline-flex;

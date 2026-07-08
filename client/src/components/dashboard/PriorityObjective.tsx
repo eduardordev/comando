@@ -29,6 +29,7 @@ export function PriorityObjective({ task, onComplete }: Props) {
           </div>
           <h2 className={styles.title}>{task.title}</h2>
           <p className={styles.meta}>
+            {task.area ? `${task.area} · ` : ''}
             {QUADRANT_META[task.quadrant].sub}
             {meta ? ` · ${meta}` : ''} · otorga +{task.points} pts
           </p>

@@ -12,6 +12,7 @@ export function NewTaskPage() {
   const { createTask } = useAppData();
 
   const [title, setTitle] = useState('');
+  const [area, setArea] = useState('');
   const [description, setDescription] = useState('');
   const [urgent, setUrgent] = useState(false);
   const [important, setImportant] = useState(false);
@@ -41,6 +42,7 @@ export function NewTaskPage() {
     try {
       await createTask({
         title: title.trim(),
+        area: area.trim(),
         description: description.trim(),
         urgent,
         important,
@@ -65,6 +67,16 @@ export function NewTaskPage() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Ej. Terminar propuesta del cliente"
+            />
+          </label>
+
+          <label className={styles.field}>
+            <span className={styles.label}>PROYECTO / ÁMBITO</span>
+            <input
+              className={styles.input}
+              value={area}
+              onChange={(e) => setArea(e.target.value)}
+              placeholder="Ej. Trabajo, Finanzas, Cliente X..."
             />
           </label>
 

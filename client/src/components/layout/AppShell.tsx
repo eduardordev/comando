@@ -43,6 +43,14 @@ export function AppShell() {
                   </>
                 )}
               </NavLink>
+              <NavLink to="/backlog" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}>
+                {({ isActive }) => (
+                  <>
+                    <span className={`${styles.navBar} ${isActive ? styles.navBarActive : ''}`} />
+                    BACKLOG
+                  </>
+                )}
+              </NavLink>
               <NavLink to="/nueva" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}>
                 {({ isActive }) => (
                   <>
@@ -92,6 +100,14 @@ export function AppShell() {
               <>
                 <span className={`${styles.mobileIndicator} ${isActive ? styles.mobileIndicatorActive : ''}`} />
                 HOY
+              </>
+            )}
+          </NavLink>
+          <NavLink to="/backlog" className={styles.mobileNavItem}>
+            {({ isActive }) => (
+              <>
+                <span className={`${styles.mobileIndicator} ${isActive ? styles.mobileIndicatorActive : ''}`} />
+                BACKLOG
               </>
             )}
           </NavLink>

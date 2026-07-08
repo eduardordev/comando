@@ -27,6 +27,7 @@ export function toTaskDto(row: PrismaTask): TaskDto {
   return {
     id: row.id,
     title: row.title,
+    area: row.area,
     description: row.description,
     checklist: parseChecklist(row.checklist),
     urgent,

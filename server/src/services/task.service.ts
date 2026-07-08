@@ -27,6 +27,7 @@ export async function createTask(input: CreateTaskInput) {
   const row = await prisma.task.create({
     data: {
       title: input.title.trim(),
+      area: (input.area ?? '').trim(),
       description: (input.description ?? '').trim(),
       urgent: input.urgent ?? false,
       important: input.important ?? false,
@@ -43,6 +44,7 @@ export async function updateTask(id: string, input: UpdateTaskInput) {
   const data: Record<string, unknown> = {};
 
   if (input.title !== undefined) data.title = input.title.trim();
+  if (input.area !== undefined) data.area = input.area.trim();
   if (input.description !== undefined) data.description = input.description.trim();
   if (input.urgent !== undefined) data.urgent = input.urgent;
   if (input.important !== undefined) data.important = input.important;

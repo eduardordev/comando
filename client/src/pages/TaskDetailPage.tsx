@@ -20,6 +20,7 @@ export function TaskDetailPage() {
   const task = tasks.find((t) => t.id === id);
 
   const [title, setTitle] = useState('');
+  const [area, setArea] = useState('');
   const [description, setDescription] = useState('');
   const [urgent, setUrgent] = useState(false);
   const [important, setImportant] = useState(false);
@@ -30,6 +31,7 @@ export function TaskDetailPage() {
   useEffect(() => {
     if (task) {
       setTitle(task.title);
+      setArea(task.area);
       setDescription(task.description);
       setUrgent(task.urgent);
       setImportant(task.important);
@@ -63,6 +65,12 @@ export function TaskDetailPage() {
     const trimmed = title.trim();
     if (!trimmed || trimmed === task.title) return;
     saveField({ title: trimmed });
+  };
+
+  const handleAreaBlur = () => {
+    const trimmed = area.trim();
+    if (trimmed === task.area) return;
+    saveField({ area: trimmed });
   };
 
   const handleDescriptionBlur = () => {
@@ -261,6 +269,21 @@ export function TaskDetailPage() {
               </div>
             </div>
           )}
+
+          <div className={styles.field}>
+            <div className={styles.fieldLabel}>PROYECTO / ÁMBITO</div>
+            {isCompleted ? (
+              <div className={styles.fieldValue}>{task.area || '—'}</div>
+            ) : (
+              <input
+                className={styles.sidebarInput}
+                value={area}
+                onChange={(e) => setArea(e.target.value)}
+                onBlur={handleAreaBlur}
+                placeholder="Ej. Trabajo, Finanzas..."
+              />
+            )}
+          </div>
 
           <div className={styles.field}>
             <div className={styles.fieldLabel}>CUADRANTE</div>
