@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "vercel-build": "npm run build --prefix ../shared && npm run db:generate --prefix ../server && npm run build"
+    "vercel-build": "npm --prefix .. run vercel-build"
   },
   "dependencies": {
     "@comando/shared": "*",

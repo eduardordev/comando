@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "npm install --include=dev",
-  "buildCommand": "npm run build --prefix shared && npm run db:generate --prefix server && npm run build --prefix client",
+  "installCommand": "test -f package.json && grep -q '\"workspaces\"' package.json && npm install --include=dev || npm --prefix .. install --include=dev",
+  "buildCommand": "test -f scripts/vercel-build.sh && bash scripts/vercel-build.sh || bash ../scripts/vercel-build.sh",
   "outputDirectory": "client/dist",
   "framework": null,
   "rewrites": [
