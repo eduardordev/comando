@@ -2,26 +2,18 @@ import { createClient } from '@libsql/client';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { resolveTursoConfig } from './turso-env.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const url = process.env.TURSO_DATABASE_URL;
-const authToken = process.env.TURSO_AUTH_TOKEN?.trim();
+const config = resolveTursoConfig();
 
-if (!url || !authToken) {
-  console.error('Faltan TURSO_DATABASE_URL y TURSO_AUTH_TOKEN');
+if (!config) {
+  console.error('Faltan credenciales de Turso (TURSO_DATABASE_URL o DATABASE_URL + TURSO_AUTH_TOKEN)');
   process.exit(1);
 }
 
-if (!url.startsWith('libsql://')) {
-  console.error('TURSO_DATABASE_URL debe empezar con libsql://');
-  process.exit(1);
-}
-
-if (!authToken.startsWith('eyJ')) {
-  console.error('TURSO_AUTH_TOKEN inválido: debe ser el JWT completo que empieza con eyJ');
-  process.exit(1);
-}
+const { url, authToken } = config;
 
 const migrationsDir = resolve(__dirname, '../prisma/migrations');
 const INIT_MIGRATION = '20260708000329_init';

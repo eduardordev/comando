@@ -1,11 +1,12 @@
 import { spawnSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { resolveTursoConfig } from '../server/scripts/turso-env.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-if (!process.env.TURSO_DATABASE_URL || !process.env.TURSO_AUTH_TOKEN) {
-  console.log('TURSO_* no configurado en build; omitiendo migraciones remotas.');
+if (!resolveTursoConfig()) {
+  console.log('Turso no configurado en build; omitiendo migraciones remotas.');
   process.exit(0);
 }
 
