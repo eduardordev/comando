@@ -6,4 +6,5 @@ cd "$ROOT"
 
 npm run build --prefix shared
 npm run db:generate --prefix server
+npm run build --prefix server
 npm run build --prefix client
