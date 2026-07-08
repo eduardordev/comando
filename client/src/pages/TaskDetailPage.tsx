@@ -7,6 +7,10 @@ import { useIsMobile } from '../hooks/useIsMobile';
 import { QuadrantTag } from '../components/shared/QuadrantTag';
 import styles from './TaskDetailPage.module.css';
 
+function checklistChanged(a: ChecklistItem[], b: ChecklistItem[]): boolean {
+  return JSON.stringify(a) !== JSON.stringify(b);
+}
+
 export function TaskDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -15,13 +19,20 @@ export function TaskDetailPage() {
 
   const task = tasks.find((t) => t.id === id);
 
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [urgent, setUrgent] = useState(false);
+  const [important, setImportant] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistItem[]>([]);
+  const [subtaskInput, setSubtaskInput] = useState('');
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (task) {
+      setTitle(task.title);
       setDescription(task.description);
+      setUrgent(task.urgent);
+      setImportant(task.important);
       setChecklist(task.checklist);
     }
   }, [task]);
@@ -48,16 +59,61 @@ export function TaskDetailPage() {
     }
   };
 
+  const handleTitleBlur = () => {
+    const trimmed = title.trim();
+    if (!trimmed || trimmed === task.title) return;
+    saveField({ title: trimmed });
+  };
+
   const handleDescriptionBlur = () => {
     if (description !== task.description) {
       saveField({ description });
     }
   };
 
+  const toggleUrgent = async () => {
+    const next = !urgent;
+    setUrgent(next);
+    await saveField({ urgent: next });
+  };
+
+  const toggleImportant = async () => {
+    const next = !important;
+    setImportant(next);
+    await saveField({ important: next });
+  };
+
   const toggleSubtask = async (subId: string) => {
     const next = checklist.map((s) =>
       s.id === subId ? { ...s, completed: !s.completed } : s,
     );
+    setChecklist(next);
+    await saveField({ checklist: next });
+  };
+
+  const updateSubtaskText = (subId: string, text: string) => {
+    setChecklist((prev) => prev.map((s) => (s.id === subId ? { ...s, text } : s)));
+  };
+
+  const saveChecklist = async () => {
+    if (!checklistChanged(checklist, task.checklist)) return;
+    await saveField({ checklist });
+  };
+
+  const addSubtask = async () => {
+    const text = subtaskInput.trim();
+    if (!text) return;
+    const next: ChecklistItem[] = [
+      ...checklist,
+      { id: crypto.randomUUID(), text, completed: false },
+    ];
+    setChecklist(next);
+    setSubtaskInput('');
+    await saveField({ checklist: next });
+  };
+
+  const removeSubtask = async (subId: string) => {
+    const next = checklist.filter((s) => s.id !== subId);
     setChecklist(next);
     await saveField({ checklist: next });
   };
@@ -87,7 +143,17 @@ export function TaskDetailPage() {
         <div className={styles.main}>
           <div>
             <QuadrantTag quadrant={task.quadrant} />
-            <h1 className={styles.title}>{task.title}</h1>
+            {isCompleted ? (
+              <h1 className={styles.title}>{task.title}</h1>
+            ) : (
+              <input
+                className={styles.titleInput}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                onBlur={handleTitleBlur}
+                placeholder="Título de la tarea..."
+              />
+            )}
           </div>
 
           <textarea
@@ -97,29 +163,65 @@ export function TaskDetailPage() {
             onBlur={handleDescriptionBlur}
             rows={6}
             placeholder="Descripción de la tarea..."
+            readOnly={isCompleted}
           />
 
           <div className={styles.checklistSection}>
             <div className={styles.checklistLabel}>
               CHECKLIST — {doneCount}/{checklist.length}
             </div>
+            {!isCompleted && (
+              <div className={styles.subtaskRow}>
+                <input
+                  className={styles.subtaskInput}
+                  value={subtaskInput}
+                  onChange={(e) => setSubtaskInput(e.target.value)}
+                  placeholder="Agregar paso..."
+                  onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addSubtask())}
+                />
+                <button type="button" className={styles.addBtn} onClick={addSubtask}>
+                  Agregar
+                </button>
+              </div>
+            )}
             {checklist.length === 0 ? (
               <p className={styles.emptyChecklist}>Sin subtareas registradas.</p>
             ) : (
               checklist.map((sub) => (
-                <button
-                  key={sub.id}
-                  type="button"
-                  className={styles.checkItem}
-                  onClick={() => toggleSubtask(sub.id)}
-                >
-                  <span
-                    className={`${styles.checkbox} ${sub.completed ? styles.checkboxDone : ''}`}
-                  />
-                  <span className={sub.completed ? styles.checkTextDone : styles.checkText}>
-                    {sub.text}
-                  </span>
-                </button>
+                <div key={sub.id} className={styles.checkItem}>
+                  <button
+                    type="button"
+                    className={styles.checkboxBtn}
+                    onClick={() => !isCompleted && toggleSubtask(sub.id)}
+                    disabled={isCompleted}
+                    aria-label={sub.completed ? 'Marcar pendiente' : 'Marcar completada'}
+                  >
+                    <span
+                      className={`${styles.checkbox} ${sub.completed ? styles.checkboxDone : ''}`}
+                    />
+                  </button>
+                  {isCompleted ? (
+                    <span className={sub.completed ? styles.checkTextDone : styles.checkText}>
+                      {sub.text}
+                    </span>
+                  ) : (
+                    <input
+                      className={`${styles.checkInput} ${sub.completed ? styles.checkInputDone : ''}`}
+                      value={sub.text}
+                      onChange={(e) => updateSubtaskText(sub.id, e.target.value)}
+                      onBlur={saveChecklist}
+                    />
+                  )}
+                  {!isCompleted && (
+                    <button
+                      type="button"
+                      className={styles.removeBtn}
+                      onClick={() => removeSubtask(sub.id)}
+                    >
+                      Quitar
+                    </button>
+                  )}
+                </div>
               ))
             )}
           </div>
@@ -132,6 +234,33 @@ export function TaskDetailPage() {
               {isCompleted ? 'COMPLETADA' : 'PENDIENTE'}
             </span>
           </div>
+
+          {!isCompleted && (
+            <div className={`${styles.toggles} ${isMobile ? styles.togglesMobile : ''}`}>
+              <div className={styles.field}>
+                <div className={styles.fieldLabel}>¿ES URGENTE?</div>
+                <button
+                  type="button"
+                  className={`${styles.toggle} ${urgent ? styles.toggleOn : ''}`}
+                  onClick={toggleUrgent}
+                >
+                  <span className={`${styles.knob} ${urgent ? styles.knobOn : ''}`} />
+                  <span>{urgent ? 'SÍ, ES URGENTE' : 'NO ES URGENTE'}</span>
+                </button>
+              </div>
+              <div className={styles.field}>
+                <div className={styles.fieldLabel}>¿ES DE ALTO IMPACTO?</div>
+                <button
+                  type="button"
+                  className={`${styles.toggle} ${important ? styles.toggleOn : ''}`}
+                  onClick={toggleImportant}
+                >
+                  <span className={`${styles.knob} ${important ? styles.knobOn : ''}`} />
+                  <span>{important ? 'SÍ, ES IMPORTANTE' : 'NO ES CRÍTICO'}</span>
+                </button>
+              </div>
+            </div>
+          )}
 
           <div className={styles.field}>
             <div className={styles.fieldLabel}>CUADRANTE</div>

@@ -64,6 +64,25 @@
   color: var(--text);
 }
 
+.titleInput {
+  width: 100%;
+  margin-top: 12px;
+  padding: 8px 4px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--border-input);
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  color: var(--text);
+}
+
+.titleInput:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
 .description {
   width: 100%;
   min-height: 120px;
@@ -101,13 +120,25 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 12px;
+  padding: 8px 12px;
   background: var(--card-inner);
   border: 1px solid var(--border-strong);
   border-radius: 8px;
-  cursor: pointer;
-  text-align: left;
   width: 100%;
+}
+
+.checkboxBtn {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkboxBtn:disabled {
+  cursor: default;
 }
 
 .checkbox {
@@ -133,6 +164,107 @@
   font-size: 13px;
   color: var(--text-dim);
   text-decoration: line-through;
+  flex: 1;
+}
+
+.checkInput {
+  flex: 1;
+  padding: 4px 0;
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.checkInput:focus {
+  outline: none;
+}
+
+.checkInputDone {
+  color: var(--text-dim);
+  text-decoration: line-through;
+}
+
+.subtaskRow {
+  display: flex;
+  gap: 8px;
+}
+
+.subtaskInput {
+  flex: 1;
+  padding: 10px 12px;
+  background: var(--card-inner);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.addBtn {
+  padding: 10px 16px;
+  background: var(--border);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.removeBtn {
+  background: none;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.toggles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.togglesMobile {
+  grid-template-columns: 1fr;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--card-inner);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 11px;
+  text-align: left;
+  width: 100%;
+}
+
+.toggleOn {
+  background: #3a1712;
+  border-color: var(--accent);
+  color: var(--accent-light);
+}
+
+.knob {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.knobOn {
+  background: var(--accent);
 }
 
 .field {
