@@ -2,6 +2,7 @@ import { useRef, type DragEvent, type KeyboardEvent } from 'react';
 import type { Task } from '@comando/shared';
 import { QUADRANT_META } from '@comando/shared';
 import { taskChecklistProgress } from '../../lib/backlog';
+import { formatDueDateShort, getDueStatus } from '../../lib/format';
 import styles from './BacklogTaskCard.module.css';
 
 interface Props {
@@ -58,6 +59,20 @@ export function BacklogTaskCard({
         <span className={styles.title}>{task.title}</span>
       </div>
       {task.area && <span className={styles.area}>{task.area}</span>}
+      {task.dueDate && task.status === 'pending' && (
+        <span
+          className={`${styles.due} ${
+            getDueStatus(task.dueDate) === 'overdue'
+              ? styles.dueOverdue
+              : getDueStatus(task.dueDate) !== 'normal'
+                ? styles.dueSoon
+                : ''
+          }`}
+        >
+          {getDueStatus(task.dueDate) === 'overdue' ? 'VENCIDA · ' : ''}
+          {formatDueDateShort(task.dueDate)}
+        </span>
+      )}
       {hasChecklist && (
         <div className={styles.progressRow}>
           <div className={styles.progressTrack}>

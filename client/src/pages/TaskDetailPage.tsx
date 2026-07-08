@@ -4,11 +4,19 @@ import { QUADRANT_META } from '@comando/shared';
 import type { ChecklistItem, UpdateTaskInput } from '@comando/shared';
 import { useAppData } from '../hooks/useAppData';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { getDueStatus } from '../lib/format';
 import { QuadrantTag } from '../components/shared/QuadrantTag';
 import styles from './TaskDetailPage.module.css';
 
 function checklistChanged(a: ChecklistItem[], b: ChecklistItem[]): boolean {
   return JSON.stringify(a) !== JSON.stringify(b);
+}
+
+// dueDate is stored as UTC midnight of the chosen calendar day, so the
+// input value is just the ISO date portion — parsing via local Date
+// getters would shift it by a day for any user west of UTC.
+function toDateInputValue(iso: string | null): string {
+  return iso ? iso.slice(0, 10) : '';
 }
 
 export function TaskDetailPage() {
@@ -26,6 +34,7 @@ export function TaskDetailPage() {
   const [important, setImportant] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistItem[]>([]);
   const [subtaskInput, setSubtaskInput] = useState('');
+  const [dueDate, setDueDate] = useState('');
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -36,6 +45,7 @@ export function TaskDetailPage() {
       setUrgent(task.urgent);
       setImportant(task.important);
       setChecklist(task.checklist);
+      setDueDate(toDateInputValue(task.dueDate));
     }
   }, [task]);
 
@@ -77,6 +87,11 @@ export function TaskDetailPage() {
     if (description !== task.description) {
       saveField({ description });
     }
+  };
+
+  const handleDueDateChange = async (value: string) => {
+    setDueDate(value);
+    await saveField({ dueDate: value ? new Date(value).toISOString() : null });
   };
 
   const toggleUrgent = async () => {
@@ -282,6 +297,39 @@ export function TaskDetailPage() {
                 onBlur={handleAreaBlur}
                 placeholder="Ej. Trabajo, Finanzas..."
               />
+            )}
+          </div>
+
+          <div className={styles.field}>
+            <div className={styles.fieldLabel}>FECHA LÍMITE</div>
+            {isCompleted ? (
+              <div className={styles.fieldValue}>
+                {task.dueDate ? toDateInputValue(task.dueDate) : '—'}
+              </div>
+            ) : (
+              <>
+                <input
+                  type="date"
+                  className={styles.dueInput}
+                  value={dueDate}
+                  onChange={(e) => handleDueDateChange(e.target.value)}
+                />
+                {task.dueDate && (
+                  <span
+                    className={
+                      getDueStatus(task.dueDate) === 'overdue'
+                        ? styles.dueOverdue
+                        : getDueStatus(task.dueDate) === 'today' || getDueStatus(task.dueDate) === 'soon'
+                          ? styles.dueToday
+                          : undefined
+                    }
+                  >
+                    {getDueStatus(task.dueDate) === 'overdue' && 'Vencida'}
+                    {getDueStatus(task.dueDate) === 'today' && 'Vence hoy'}
+                    {getDueStatus(task.dueDate) === 'soon' && 'Vence mañana'}
+                  </span>
+                )}
+              </>
             )}
           </div>
 

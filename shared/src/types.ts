@@ -19,6 +19,7 @@ export interface Task {
   status: TaskStatus;
   createdAt: string;
   completedAt: string | null;
+  dueDate: string | null;
   pointsAwarded: number | null;
   quadrantAtCompletion: Quadrant | null;
   quadrant: Quadrant;
@@ -59,6 +60,7 @@ export interface CreateTaskInput {
   urgent?: boolean;
   important?: boolean;
   checklist?: { text: string }[];
+  dueDate?: string | null;
 }
 
 export interface UpdateTaskInput {
@@ -69,4 +71,5 @@ export interface UpdateTaskInput {
   important?: boolean;
   checklist?: ChecklistItem[];
   status?: TaskStatus;
+  dueDate?: string | null;
 }

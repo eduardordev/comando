@@ -14,6 +14,7 @@ export function NewTaskPage() {
   const [title, setTitle] = useState('');
   const [area, setArea] = useState('');
   const [description, setDescription] = useState('');
+  const [dueDate, setDueDate] = useState('');
   const [urgent, setUrgent] = useState(false);
   const [important, setImportant] = useState(false);
   const [subtaskInput, setSubtaskInput] = useState('');
@@ -47,6 +48,7 @@ export function NewTaskPage() {
         urgent,
         important,
         checklist: subtasks.map((text) => ({ text })),
+        dueDate: dueDate ? new Date(dueDate).toISOString() : null,
       });
       navigate('/');
     } finally {
@@ -88,6 +90,16 @@ export function NewTaskPage() {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Detalles, contexto, criterios de éxito..."
               rows={5}
+            />
+          </label>
+
+          <label className={styles.field}>
+            <span className={styles.label}>FECHA LÍMITE (OPCIONAL)</span>
+            <input
+              type="date"
+              className={styles.input}
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
             />
           </label>
 

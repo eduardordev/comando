@@ -81,6 +81,27 @@
   flex-shrink: 0;
 }
 
+.due {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  width: fit-content;
+  color: var(--text-muted);
+  background: var(--border);
+}
+
+.dueOverdue {
+  color: var(--accent-light);
+  background: var(--alert-bg);
+}
+
+.dueSoon {
+  color: var(--yellow);
+  background: #2a2210;
+}
+
 .footer {
   display: flex;
   align-items: center;

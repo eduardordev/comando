@@ -319,6 +319,25 @@
   border: 1px solid var(--green);
 }
 
+.dueInput {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--card-inner);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.dueOverdue {
+  color: var(--accent-light);
+}
+
+.dueToday,
+.dueSoon {
+  color: var(--yellow);
+}
+
 .points {
   font-family: var(--font-mono);
   font-weight: 700;

@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express from 'express';
+import { cronRouter } from './routes/cron.routes';
 import { statsRouter } from './routes/stats.routes';
 import { tasksRouter } from './routes/tasks.routes';
 
@@ -17,6 +18,7 @@ export function createApp() {
 
   app.use('/api/tasks', tasksRouter);
   app.use('/api/stats', statsRouter);
+  app.use('/api/cron', cronRouter);
 
   return app;
 }

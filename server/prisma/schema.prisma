@@ -19,10 +19,12 @@ model Task {
   status               String    @default("pending")
   createdAt            DateTime  @default(now()) @map("created_at")
   completedAt          DateTime? @map("completed_at")
+  dueDate              DateTime? @map("due_date")
   pointsAwarded        Int?      @map("points_awarded")
   quadrantAtCompletion Int?      @map("quadrant_at_completion")
 
   @@index([status])
   @@index([completedAt])
+  @@index([dueDate])
   @@map("tasks")
 }

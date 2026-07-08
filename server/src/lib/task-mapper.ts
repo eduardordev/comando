@@ -35,6 +35,7 @@ export function toTaskDto(row: PrismaTask): TaskDto {
     status: row.status as 'pending' | 'completed',
     createdAt: row.createdAt.toISOString(),
     completedAt: row.completedAt?.toISOString() ?? null,
+    dueDate: row.dueDate?.toISOString() ?? null,
     pointsAwarded: row.pointsAwarded,
     quadrantAtCompletion: row.quadrantAtCompletion as 1 | 2 | 3 | 4 | null,
     quadrant,

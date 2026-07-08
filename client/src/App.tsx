@@ -6,6 +6,7 @@ import { NewTaskPage } from './pages/NewTaskPage';
 import { StatsPage } from './pages/StatsPage';
 import { TaskDetailPage } from './pages/TaskDetailPage';
 import { TodayPage } from './pages/TodayPage';
+import { WeekPage } from './pages/WeekPage';
 
 export function App() {
   return (
@@ -14,6 +15,7 @@ export function App() {
         <Routes>
           <Route element={<AppShell />}>
             <Route index element={<TodayPage />} />
+            <Route path="semana" element={<WeekPage />} />
             <Route path="backlog" element={<BacklogPage />} />
             <Route path="nueva" element={<NewTaskPage />} />
             <Route path="stats" element={<StatsPage />} />

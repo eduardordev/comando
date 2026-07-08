@@ -32,6 +32,7 @@ export async function createTask(input: CreateTaskInput) {
       urgent: input.urgent ?? false,
       important: input.important ?? false,
       checklist: serializeChecklist(checklist),
+      dueDate: input.dueDate ? new Date(input.dueDate) : null,
     },
   });
   return toTaskDto(row);
@@ -49,6 +50,7 @@ export async function updateTask(id: string, input: UpdateTaskInput) {
   if (input.urgent !== undefined) data.urgent = input.urgent;
   if (input.important !== undefined) data.important = input.important;
   if (input.checklist !== undefined) data.checklist = serializeChecklist(input.checklist);
+  if (input.dueDate !== undefined) data.dueDate = input.dueDate ? new Date(input.dueDate) : null;
 
   if (input.status === 'completed' && existing.status !== 'completed') {
     const urgent = (input.urgent ?? existing.urgent) as boolean;
@@ -147,6 +149,63 @@ export async function getWeeklyPoints(weeks = 6): Promise<number[]> {
     result.push(sum);
   }
   return result;
+}
+
+export interface DigestData {
+  overdue: ReturnType<typeof toTaskDto>[];
+  dueToday: ReturnType<typeof toTaskDto>[];
+  dueTomorrow: ReturnType<typeof toTaskDto>[];
+  byQuadrant: Record<1 | 2 | 3 | 4, ReturnType<typeof toTaskDto>[]>;
+  weekAhead: { dateKey: string; tasks: ReturnType<typeof toTaskDto>[] }[];
+}
+
+function utcMidnight(date = new Date()): Date {
+  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+}
+
+export async function getDigestData(): Promise<DigestData> {
+  // dueDate is always stored as UTC midnight of the chosen calendar day (see
+  // client date-input handling), so all boundaries here must be UTC-anchored
+  // too — otherwise a server running in a non-UTC timezone miscategorizes
+  // tasks by a day.
+  const today = utcMidnight();
+  const tomorrow = new Date(today.getTime() + 86_400_000);
+  const dayAfterTomorrow = new Date(today.getTime() + 2 * 86_400_000);
+  const weekEnd = new Date(today.getTime() + 7 * 86_400_000);
+
+  const rows = await prisma.task.findMany({
+    where: { status: 'pending' },
+    orderBy: [{ dueDate: 'asc' }, { createdAt: 'desc' }],
+  });
+  const tasks = rows.map(toTaskDto);
+
+  const overdue = tasks.filter((t) => t.dueDate && new Date(t.dueDate) < today);
+  const dueToday = tasks.filter(
+    (t) => t.dueDate && new Date(t.dueDate) >= today && new Date(t.dueDate) < tomorrow,
+  );
+  const dueTomorrow = tasks.filter(
+    (t) =>
+      t.dueDate && new Date(t.dueDate) >= tomorrow && new Date(t.dueDate) < dayAfterTomorrow,
+  );
+
+  const byQuadrant: DigestData['byQuadrant'] = { 1: [], 2: [], 3: [], 4: [] };
+  for (const t of tasks) byQuadrant[t.quadrant].push(t);
+
+  const withinWeek = tasks.filter(
+    (t) => t.dueDate && new Date(t.dueDate) >= today && new Date(t.dueDate) < weekEnd,
+  );
+  const weekMap = new Map<string, ReturnType<typeof toTaskDto>[]>();
+  for (const t of withinWeek) {
+    const key = (t.dueDate as string).slice(0, 10);
+    const list = weekMap.get(key) ?? [];
+    list.push(t);
+    weekMap.set(key, list);
+  }
+  const weekAhead = [...weekMap.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([dateKey, dayTasks]) => ({ dateKey, tasks: dayTasks }));
+
+  return { overdue, dueToday, dueTomorrow, byQuadrant, weekAhead };
 }
 
 export { parseChecklist };
