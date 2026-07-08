@@ -7,3 +7,6 @@ server/data/
 .env.local
 .vercel
 .DS_Store
+
+.vercel
+.env*.local
