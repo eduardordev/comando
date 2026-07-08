@@ -1,4 +1,4 @@
-import type { Task } from '@comando/shared';
+import type { ChecklistItem, Task, UpdateTaskInput } from '@comando/shared';
 
 export type BacklogStage = 'backlog' | 'in_progress' | 'completed';
 
@@ -86,5 +86,43 @@ export function computeBacklogStats(tasks: Task[]) {
       ? Math.round((checklistDone / checklistTotal) * 100)
       : 0,
     areas: getUniqueAreas(tasks).length,
+  };
+}
+
+function resetChecklist(checklist: ChecklistItem[]): ChecklistItem[] {
+  return checklist.map((item) => ({ ...item, completed: false }));
+}
+
+function markChecklistInProgress(checklist: ChecklistItem[]): ChecklistItem[] {
+  if (checklist.length === 0) {
+    return [{ id: crypto.randomUUID(), text: 'Iniciado', completed: true }];
+  }
+  if (checklist.some((item) => item.completed)) return checklist;
+  return checklist.map((item, index) =>
+    index === 0 ? { ...item, completed: true } : item,
+  );
+}
+
+export function buildStageTransitionPatch(
+  task: Task,
+  targetStage: BacklogStage,
+): UpdateTaskInput | null {
+  const currentStage = getBacklogStage(task);
+  if (currentStage === targetStage) return null;
+
+  if (targetStage === 'completed') {
+    return { status: 'completed' };
+  }
+
+  if (targetStage === 'backlog') {
+    return {
+      status: 'pending',
+      checklist: resetChecklist(task.checklist),
+    };
+  }
+
+  return {
+    status: 'pending',
+    checklist: markChecklistInProgress(task.checklist),
   };
 }

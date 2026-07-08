@@ -16,7 +16,7 @@ import styles from './BacklogPage.module.css';
 export function BacklogPage() {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const { tasks, loading, error } = useAppData();
+  const { tasks, loading, error, updateTask } = useAppData();
   const [areaFilter, setAreaFilter] = useState<string | null>(null);
 
   const areas = useMemo(() => getUniqueAreas(tasks), [tasks]);
@@ -100,7 +100,11 @@ export function BacklogPage() {
             </span>
           )}
         </div>
-        <BacklogBoard tasks={filtered} onTaskClick={(id) => navigate(`/tarea/${id}`)} />
+        <BacklogBoard
+          tasks={filtered}
+          onTaskClick={(id) => navigate(`/tarea/${id}`)}
+          onStageChange={(id, patch) => updateTask(id, patch)}
+        />
       </div>
     </div>
   );

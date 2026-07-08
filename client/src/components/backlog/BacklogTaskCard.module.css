@@ -6,9 +6,20 @@
   background: var(--card-inner);
   border: 1px solid var(--border-strong);
   border-radius: 8px;
-  cursor: pointer;
+  cursor: grab;
   text-align: left;
   width: 100%;
+  user-select: none;
+  transition: opacity 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.dragging {
+  opacity: 0.45;
+  border-color: var(--accent);
 }
 
 .top {
